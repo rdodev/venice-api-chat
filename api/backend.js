@@ -3,13 +3,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const path = require('path');
-const { YouTubeURLParser }= require('../youtube_url_parser.js');
-const { YouTubeAPIClient } = require('../youtube_transcript_analysis.js');
+
 
 
 const app = express();
 const port = 3000;
-// const yt = new ytParser();
+
 
 //static content
 app.use(express.static(path.join(__dirname, '..')));
@@ -36,8 +35,7 @@ const HEADERS = {
 
 
 const PROMPTS = {
-  chat: "Briefly respond to the following: ",
-  video_summary: "Provide a brief analysis of the following trasncript. Include most often used words and general sentiment analysis: ",
+  chat: "Briefly respond to the following: "
 };
 
 const countWords = (str) => {
@@ -88,16 +86,6 @@ app.post('/api/chat', async (req, res) => {
     
     if (countWords(urlDecodedContent) > 100) {
       res.status(406).json({ error: 'Content body too large'})
-    }
-
-    if (YouTubeURLParser.isValidYouTubeURL(urlDecodedContent)) {
-      isModelRequest = false;
-
-      const vid = YouTubeURLParser.extractVideoId(urlDecodedContent);
-      const yttp = new YouTubeAPIClient();
-      const xscript = await yttp.getFullTranscript(vid);
-      const chat = await requestModelResponse(xscript[0].text, 'video_summary');
-      res.json({ chat });
     }
   
     if(isModelRequest) {
