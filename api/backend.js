@@ -29,7 +29,6 @@ const COMMON_PARAMS = {
 
 const HEADERS = {
   'Content-Type': 'application/json',
-  "anthropic-version": "2023-06-01",
   "Authorization": "Bearer " + process.env.VENICE_API_KEY,
 };
 
@@ -58,7 +57,6 @@ const requestModelResponse = async (content, requestType, requester = axios) => 
       },
       { headers: HEADERS}
     );
-    //console.log(response.data.choices[0].message.content);
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error calling API:', error.message);
