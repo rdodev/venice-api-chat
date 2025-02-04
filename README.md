@@ -1,6 +1,10 @@
 # LonzoChat: Context-less LLM Chat with Venice API
 
-A web application that provides chat functionality with LLMs using the Llama 3.3 70B model.
+A web application that provides chat functionality with LLMs using the Llama 3.3 70B model. 
+
+## Context-less
+
+This means that the LLM will not have context for every prompt/chat message in the window. Instead, each message is "standalone" and won't have influence on any other answers.
 
 ## Features
 
