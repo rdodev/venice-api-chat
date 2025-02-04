@@ -1,0 +1,517 @@
+/* === IMPORTS & FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+/* === GLOBAL VARIABLES === */
+:root {
+    /* Dark Mode (Default) Color Palette */
+    --bg-primary: #121212;
+    --bg-secondary: #1E1E1E;
+    --text-primary: #E0E0E0;
+    --text-secondary: #A9A9A9;
+    --primary: #4A4A4A;
+    --primary-light: #D3D3D3;
+    --glow-color: rgba(211, 211, 211, 0.2);
+    --border-color: #333;
+    --header-height: 40px;
+    
+    /* Gradient Backgrounds */
+    --gradient-primary: linear-gradient(135deg, 
+        color-mix(in srgb, var(--bg-primary) 90%, black 10%), 
+        color-mix(in srgb, var(--bg-primary) 95%, white 5%)
+    );
+    --gradient-secondary: linear-gradient(135deg, 
+        color-mix(in srgb, var(--bg-primary) 90%, black 10%), 
+        color-mix(in srgb, var(--bg-primary) 95%, white 5%)
+    );
+}
+
+/* Light Mode Color Palette */
+.light-theme {
+    --bg-primary: #F5F5F5;
+    --bg-secondary: #FFFFFF;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --primary: #E0E0E0;
+    --primary-light: #4A4A4A;
+    --glow-color: rgba(74, 74, 74, 0.1);
+    --border-color: #D3D3D3;
+    
+    /* Light Mode Gradients */
+    --gradient-primary: linear-gradient(135deg, 
+        color-mix(in srgb, var(--bg-primary) 95%, black 5%), 
+        color-mix(in srgb, var(--bg-primary) 98%, white 2%)
+    );
+    --gradient-secondary: linear-gradient(135deg, 
+        color-mix(in srgb, var(--bg-secondary) 95%, black 5%), 
+        color-mix(in srgb, var(--bg-secondary) 98%, white 2%)
+    );
+}
+
+/* === RESET & BASE STYLES === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+body {
+    background: var(--gradient-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    line-height: 1.2;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* === ANIMATIONS === */
+@keyframes textShadowPulse {
+    0% { text-shadow: 0 0 8px var(--primary); }
+    50% { text-shadow: 0 0 12px var(--primary); }
+    100% { text-shadow: 0 0 8px var(--primary); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === HEADER STYLES === */
+.header {
+    height: var(--header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    background: var(--gradient-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    z-index: 3;
+}
+
+.header h1 {
+    color: var(--primary-light);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: textShadowPulse 2s infinite;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+/* === HEADER CONTROLS === */
+.system-prompt-select,
+#editPromptBtn {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--text-primary);
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.system-prompt-select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+#editPromptBtn {
+    transition: all 0.3s ease;
+}
+
+#editPromptBtn:hover {
+    background: rgba(169, 169, 169, 0.1);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+/* === CHAT CONTAINER === */
+.chat-container {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+    background-color: var(--bg-primary);
+}
+
+/* === MESSAGE STYLES === */
+.message {
+    padding: 0.7rem 1rem;
+    position: relative;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    border-left: 2px solid transparent;
+    transition: all 0.3s ease;
+    padding-right: 3.5rem;
+    background: var(--gradient-secondary);
+    border-left-color: var(--primary-light);
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.message:hover {
+    border-left: 2px solid var(--primary-light);
+    background: linear-gradient(135deg, 
+        color-mix(in srgb, var(--bg-secondary) 85%, var(--primary-light) 15%), 
+        color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%)
+    );
+}
+
+.message-content {
+    display: flex;
+    gap: 0.8rem;
+    align-items: baseline;
+    flex: 1;
+}
+
+/* === MESSAGE ACTION BUTTONS === */
+.copy-button,
+.delete-button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    transition: all 0.2s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    bottom: 0.5rem;
+    transform: none;
+    opacity: 0.6;
+    right: 0.5rem;
+    z-index: 10;
+    color: var(--text-secondary);
+}
+
+.copy-button {
+    right: 2.2rem;
+}
+
+.message:hover .copy-button,
+.message:hover .delete-button {
+    display: flex;
+}
+
+.copy-button:hover,
+.delete-button:hover {
+    opacity: 1;
+    background: color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%);
+    color: var(--primary-light);
+}
+
+.copy-button svg,
+.delete-button svg {
+    color: #666;
+    width: 18px;
+    height: 18px;
+}
+
+/* === THEME TOGGLE === */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    order: 3;
+}
+
+.theme-toggle:hover {
+    color: var(--text-primary);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* === INPUT CONTAINER === */
+.input-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--gradient-secondary);
+    border-top: 1px solid var(--border-color);
+    position: relative;
+    z-index: 3;
+}
+
+#messageInput {
+    flex: 1;
+    min-height: 40px;
+    max-height: calc(6 * 1.5em);
+    height: auto;
+    resize: none;
+    overflow-y: hidden;
+    line-height: 1.5em;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--text-primary);
+    scrollbar-width: thin;
+}
+
+#messageInput:focus {
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+#messageInput::-webkit-scrollbar {
+    width: 6px;
+}
+
+#messageInput::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.send-button {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--text-primary);
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.send-button:hover {
+    background: color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+.send-button svg {
+    width: 20px;
+    height: 20px;
+    color: inherit;
+}
+
+/* === MODAL STYLES === */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--gradient-secondary);
+    border: 1px solid var(--border-color);
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 0 20px var(--glow-color);
+    color: var(--text-primary);
+}
+
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(105, 105, 105, 0.2);
+}
+
+.modal-header h2 {
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.1rem;
+    animation: textShadowPulse 2s infinite;
+}
+
+#closePromptEditor {
+    background: none;
+    border: none;
+    color: var(--primary-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#promptEditor {
+    width: 100%;
+    height: 300px;
+    padding: 1rem;
+    background-color: rgba(105, 105, 105, 0.1);
+    border: none;
+    color: var(--primary-light);
+    resize: vertical;
+    outline: none;
+}
+
+.modal-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: rgba(105, 105, 105, 0.2);
+}
+
+.modal-footer button {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary-light);
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.modal-footer button:hover {
+    background: rgba(169, 169, 169, 0.1);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+/* === CODE BLOCK STYLES === */
+pre {
+    background: rgba(105, 105, 105, 0.1);
+    border: 1px solid var(--primary);
+    border-radius: 2px;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    overflow-x: auto;
+}
+
+code {
+    color: var(--primary-light);
+}
+
+/* === LOADING ANIMATION === */
+.message-spinner::after {
+    color: var(--primary-light);
+    animation: textShadowPulse 2s infinite;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
+}
+
+/* === MESSAGE COMPONENTS === */
+.timestamp {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    min-width: 50px;
+}
+
+.username {
+    color: var(--primary-light);
+    min-width: 70px;
+}
+
+.light-theme .username {
+    color: #1A1A1A;
+}
+
+.light-theme .user-message .username,
+.light-theme .bot-message .username {
+    color: #1A1A1A;
+}
+
+.message-text {
+    flex: 1;
+    line-height: 1.4;
+    color: inherit;
+}
+
+/* === MESSAGE TYPES === */
+.user-message {
+    background: linear-gradient(45deg, 
+        color-mix(in srgb, var(--bg-secondary) 90%, black 10%), 
+        color-mix(in srgb, var(--bg-secondary) 95%, white 5%)
+    );
+}
+
+.bot-message {
+    background: linear-gradient(225deg, 
+        color-mix(in srgb, var(--bg-secondary) 90%, black 10%), 
+        color-mix(in srgb, var(--bg-secondary) 95%, white 5%)
+    );
+}
+
+.user-message:hover {
+    background: linear-gradient(45deg, 
+        color-mix(in srgb, var(--bg-secondary) 85%, var(--primary-light) 15%), 
+        color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%)
+    );
+}
+
+.bot-message:hover {
+    background: linear-gradient(225deg, 
+        color-mix(in srgb, var(--bg-secondary) 85%, var(--primary-light) 15%), 
+        color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%)
+    );
+}
+
+/* === LIGHT THEME VARIATIONS === */
+.light-theme .user-message {
+    background: linear-gradient(45deg, 
+        color-mix(in srgb, var(--bg-secondary) 95%, black 5%), 
+        color-mix(in srgb, var(--bg-secondary) 98%, white 2%)
+    );
+}
+
+.light-theme .bot-message {
+    background: linear-gradient(225deg, 
+        color-mix(in srgb, var(--bg-secondary) 95%, black 5%), 
+        color-mix(in srgb, var(--bg-secondary) 98%, white 2%)
+    );
+}
+
+.light-theme .user-message:hover {
+    background: linear-gradient(45deg, 
+        color-mix(in srgb, var(--bg-secondary) 85%, var(--primary-light) 15%), 
+        color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%)
+    );
+}
+
+.light-theme .bot-message:hover {
+    background: linear-gradient(225deg, 
+        color-mix(in srgb, var(--bg-secondary) 85%, var(--primary-light) 15%), 
+        color-mix(in srgb, var(--bg-secondary) 90%, var(--primary-light) 10%)
+    );
+}

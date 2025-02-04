@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+    <script src="https://unpkg.com/marked@4.3.0/marked.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="header-left">
+            <h1>Chatbox</h1>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle" class="theme-toggle" title="Toggle theme" aria-label="Toggle dark/light theme">
+                <svg id="themeIcon" class="icon"></svg>
+            </button>
+            <select id="modelSelect" class="system-prompt-select" aria-label="Select AI model"></select>
+            <select id="systemPromptSelect" class="system-prompt-select" aria-label="Select system prompt"></select>
+            <button id="editPromptBtn" aria-label="Edit system prompt">Edit System</button>
+        </div>
+    </header>
+
+    <main class="chat-container" id="chatContainer" role="log" aria-live="polite" aria-label="Chat messages">
+    </main>
+
+    <footer class="input-container" role="form">
+        <textarea 
+            id="messageInput" 
+            placeholder="Type your message..." 
+            rows="1"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            aria-label="Message input"
+            wrap="soft"
+        ></textarea>
+        <button id="sendButton" class="send-button" aria-label="Send message">
+            <svg id="sendIcon" class="icon"></svg>
+        </button>
+    </footer>
+
+    <!-- Add prompt editor modal -->
+    <div id="promptEditorModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Edit System Prompt</h2>
+          <button id="closePromptEditor" aria-label="Close modal">&times;</button>
+        </div>
+        <textarea id="promptEditor" aria-label="System prompt editor"></textarea>
+        <div class="modal-footer">
+          <button id="savePrompt">Save</button>
+          <button id="cancelPrompt">Cancel</button>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
