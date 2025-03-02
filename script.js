@@ -4,7 +4,7 @@ const chatContainer = document.getElementById('chatContainer');
 const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
 let lastMessage = '';
-
+//change
 
 function formatTimestamp() {
     const now = new Date();
